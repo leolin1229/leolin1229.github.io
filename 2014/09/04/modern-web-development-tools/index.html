@@ -1,0 +1,380 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman) | Leolin杂货小店</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Leolin">
+    
+    <meta name="description" content="[toc]
+最近看到javacodegeeks上的一篇文章Node, Grunt, Bower and Yeoman – A Modern web dev’s Toolkit， 文章介绍了一个web开发的工具集。 正好我今年以来也在使用这套工具集开发Web应用程序，也一直想写一篇文章总结一下这套开发">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Leolin杂货小店" title="Leolin杂货小店"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Leolin杂货小店">Leolin杂货小店</a></h1>
+				<h2 class="blog-motto">杂七杂八</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:leol.in">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/09/04/modern-web-development-tools/" title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)" itemprop="url">【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://leol.in" title="Leolin">Leolin</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-09-04T02:46:57.000Z" itemprop="datePublished">Sep 4 2014</time>
+    Updated:<time datetime="2014-09-04T07:24:29.000Z" itemprop="dateModified">Sep 4 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number">1.</span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number">2.</span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number">3.</span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number">4.</span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">4.1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number">5.</span> <span class="toc-text">Compass</span></a></li></ol>
+		</div>
+		
+		<p>[toc]</p>
+<p>最近看到javacodegeeks上的一篇文章<a href="http://www.javacodegeeks.com/2014/08/node-grunt-bower-and-yeoman-a-modern-web-devs-toolkit.html" target="_blank" rel="external">Node, Grunt, Bower and Yeoman – A Modern web dev’s Toolkit</a>， 文章介绍了一个web开发的工具集。 正好我今年以来也在使用这套工具集开发Web应用程序，也一直想写一篇文章总结一下这套开发套件的用法，借此机会，参考这篇文章，总结一下我使用这套工具的经验。<br>在的文章中，作者使用angular 框架开发，而我，遵循公司的选择，使用Ember.js作为我的开发框架。同时使用Compass进行SCSS的编译。这些地方会有所不同。</p>
+<p>像Node.js， 已经不算新鲜的玩意了。Node.js第一个版本于2009年发布，现在有很多的公司也采用Node作为后端开发工具。 至于Node.js是否代表先进的开发方向， 目前还有很大的争论。但是基于Node.js的生态圈已经形成，一大波的优秀的的Node.js 模块已经涌现。但是像Grunt, Bower等工具，也有不少的朋友并不了解。所以这篇文章特别介绍一下它们。</p>
+<h1 id="Node_And_NPM">Node And NPM</h1>
+<center><img src="http://upload.wikimedia.org/wikipedia/commons/6/67/NodeJS.png" alt="nodejs"></center>
+
+<p><a href="http://nodejs.org/" target="_blank" rel="external">Node.js</a> 是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎。目的是为了提供撰写可扩展网络程序，如Web服务。第一个版本由Ryan Dahl于2009年发布，后来，Joyent雇用了Dahl，并协助发展Node.js。</p>
+<p>其他编程语言的类似开发环境，包含Twisted于Python，Perl Object Environment于Perl，libevent于C，和EventMachine于Ruby。与一般JavaScript不同的地方，Node.js并不是在Web浏览器上运行，而是一种在服务器上运行的Javascript服务端JavaScript。或者你可以使用node-webkit创建桌面应用程序。</p>
+<center><img src="http://a3ab771892fd198a96736e50.javacodegeeks.netdna-cdn.com/wp-content/uploads/2014/08/npm.png" alt="NPM"></center>
+
+<p>Node.js社区创建了许许多多的优秀的node module，这些module发布在<a href="https://www.npmjs.org/" target="_blank" rel="external">npmjs.org</a>。 目前已经有10万左右形形色色的模块可供使用。社区的力量不容小觑。</p>
+<p>这篇文档并不会介绍使用Node.js去开发服务器程序，而是利用Node.js这些模块辅助我们前端程序的开发。特别是利用npm安装一些流行的模块如Grunt等。</p>
+<h2 id="安装Node">安装Node</h2>
+<p><a href="http://nodejs.org/download/" target="_blank" rel="external">官方网站</a>提供了各种操作系统, 32位/64位机器上的安装程序。 还提供了源码。 安装非常的简单。<br>一旦安装成功，你可以通过$ node -v查看Node.js的版本。</p>
+<p>在安装Node.js的时候，一般会同时将npm也安装上了。 执行<code>npm -v</code>查看npm的版本。<br>通过npm可以安装所需的Node.js模块， 如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> grunt</span></div></pre></td></tr></table></figure>
+
+<p>npm install可以从npmjs.org安装最新的或者特定的模块， 也可以从本地或者服务器如github上安装。 安装的模块放在了当前的<code>node_modules</code>文件夹中。<br>对于常用的模块，如grunt，你可以把它放在全局的文件夹中。 这样其它的项目就不用安装这个依赖了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> grunt -g</span></div></pre></td></tr></table></figure>
+
+<p>最好的方式是创建一个<code>package.json</code>文件。在这个文件中管理你的项目需要的Node.js模块。<br>执行<code>npm init</code>根据提示回答后会自动创建一个<code>package.json</code>。<br>如果你想加入一个模块， 如grunt。<br>执行<code>npm install grunt --save</code>会自动更新<code>package.json</code>文件。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">  <span class="keyword">...</span></div><div class="line">  <span class="string">"devDependencies"</span>: {</div><div class="line">    <span class="string">"grunt"</span>: <span class="string">"^0.4.5"</span></div><div class="line">  }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>而执行<code>npm install grunt --save-dev</code>也会自动更新<code>package.json</code>文件。<br>它会将模块加到devDependencies中。在devDependencies只在开发的时候用，模块不会部署到发布的应用程序中。<br>命令<code>npm uninstall --save grunt</code>是卸载模块。</p>
+<p>npm包管理工具使用<a href="http://semver.org/" target="_blank" rel="external">Semantic Versioning</a>。 这个程序版本规范非常的强大， 通过一个字符串可以提供非常丰富的语义。你可以到其网站好好阅读一下。<br><code>1.3.5</code>， <code>~1.3.5</code>，<code>1.3.x</code>，<code>^1.3.5</code>，<code>latest</code>，<code>*</code>都是合法的版本号。</p>
+<p>npm命令行工具的参考手册可以看<a href="https://www.npmjs.org/doc/" target="_blank" rel="external">这里</a>。</p>
+<h1 id="Bower">Bower</h1>
+<center><img src="http://blog.fens.me/wp-content/uploads/2013/08/bower.png" alt="Bower"></center>
+
+<p>前面讲到，npm是Node.js的包管理工具。 在Web开发中，我们经常会用到bootstrap， JQuery这些CSS, 前端javascript框架。 如何在我们的项目中管理这些框架？ 包括引入，检查依赖， 更新，删除？这将会用到另外一个很好的工具: <a href="http://bower.io/" target="_blank" rel="external">Bower</a>。</p>
+<p>使用npm安装bower:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> -g bower</span></div></pre></td></tr></table></figure>
+
+<p>通过命令<code>bower install &lt;package&gt;</code>安装依赖：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># registered package</span></div><div class="line">bower install jquery</div><div class="line"><span class="preprocessor"># GitHub shorthand</span></div><div class="line">bower install desandro/masonry</div><div class="line"><span class="preprocessor"># Git endpoint</span></div><div class="line">bower install git:<span class="comment">//github.com/user/package.git</span></div><div class="line"><span class="preprocessor"># URL</span></div><div class="line">bower install http:<span class="comment">//example.com/script.js</span></div></pre></td></tr></table></figure>
+
+<p>你可以通过<code>bower init</code>初始化一个<code>bower.json</code>文件来管理依赖。你可以通过通过根目录的<code>.bowerrc</code>来配置bower。<br>这里有一篇关于bower的好的<a href="https://medium.com/@ZaidHanania/bower-101-c0b57322df8" target="_blank" rel="external">文章</a>。</p>
+<p><a href="http://stackoverflow.com/questions/18641899/difference-between-bower-and-npm" target="_blank" rel="external">stackoverflow</a>有一篇关于bower和npm的对比。</p>
+<h1 id="Yeoman">Yeoman</h1>
+<center><img src="http://yeomanjs.org/assets/img/yeoman-logo.png" alt="Yeoman"></center>
+
+<p>Yeoman是一个脚手架工具，可以方便的为你产生一个初始项目， 标准的文件夹布局， 标准的包依赖， 初始的页面例子。 Yeoman提供乐意一些<code>generators</code>， 用来生成不同的项目。<br>这些<code>generators</code>有些由<a href="http://yeoman.io/generators/official.html" target="_blank" rel="external">官方</a>提供，有些由<a href="http://yeoman.io/generators/community.html" target="_blank" rel="external">社区</a>提供。</p>
+<p>它有什么好处呢？</p>
+<ul>
+<li>可以快速创建一个项目。正所谓万事开头难， yemoman帮你度难关。 Yemoman帮你设置好了项目， 相关的文件，相应的依赖，这些事情本来会耗费你相当大的精力和时间</li>
+<li>你可以冒充一个专家，尽管你可能并不全部熟悉这些全部工具。 当然，你对自己很有信心，也可以根据需要调整yeoman生成的东西。 这是肯定的。 yeoman只是给你提供了最基础的架构。</li>
+<li>你可以学习到很多新知识。 笔者深有体会。 基本上讲，我是一个后端开发工程师， 前端并不是我的强项。 但是yeoman帮我了解了很多的东西，如Scss等。</li>
+</ul>
+<p>yeoman有个<a href="http://yeomanjs.org/" target="_blank" rel="external">中文社区</a>。</p>
+<p>安装yeoman很简单，利用前面的<code>npm</code>工具。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> -g yo</span></div></pre></td></tr></table></figure>
+
+<p>选择一个<code>generator</code>, 如果你想基于angular,就用<code>npm install -g generator-angular</code>， 如果你想用Ember,就用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npm install -g generator-ember</div><div class="line">mkdir myemberapp && cd myemberapp(The directory's <span class="property">name</span> <span class="keyword">is</span> your <span class="type">application</span>'s <span class="property">name</span>)</div><div class="line">yo ember</div><div class="line">npm install -g grunt-mocha</div><div class="line">grunt serve</div></pre></td></tr></table></figure>
+
+<p>官方文档提供了详细的<a href="https://github.com/yeoman/generator-ember" target="_blank" rel="external">介绍</a>。</p>
+<h1 id="Grunt">Grunt</h1>
+<center><img src="http://gruntjs.com/img/grunt-logo-no-wordmark.svg" alt="Grunt"></center>
+
+<p>Grunt是为Javascript项目提供的一个基于任务的命令行构建工具。 类似Java业界的Ant工具一样。</p>
+<h2 id="安装Grunt">安装Grunt</h2>
+<p>Grunt运行在Node.js平台之上， 通过npm安装。 它包含两个组件： <code>grunt-cli</code>和<code>grunt</code>。</p>
+<p>安装很简单：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> -g grunt-cli</span></div><div class="line">npm <span class="keyword">install</span> -g grunt</div></pre></td></tr></table></figure>
+
+<p>你需要提供一个<code>Gruntfile.js</code>文件，就像Ant需要build.xml文件一样。初始文件很简单：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span><span class="params">(grunt)</span> </span>{</div><div class="line">	<span class="comment">// Do grunt-related things in here</span></div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>Grunt通过grunt参数暴露了它的方法和属性。<br>Grunt有非常多的模块。这些模块可以通过<code>npm</code>进行安装。 正常情况下它们的名字都会以<code>grunt-</code>为前缀。 官方提供的模块的前缀是<code>grunt-contrib</code>， 如<code>grunt-contrib-uglify</code>。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span> <span class="comment">--save-dev grunt-contrib-uglify</span></span></div></pre></td></tr></table></figure>
+
+<p>我越来越感觉这玩意特别像Apache Ant了</p>
+<p>国内有一个很好的<a href="http://www.gruntjs.net/" target="_blank" rel="external">Grunt中文网站</a>，可以更方便的了解和学习Grunt。</p>
+<h1 id="Compass">Compass</h1>
+<center><img src="http://compass-style.org/images/compass-logo.png?1408149819" alt="Compass"></center>
+
+<p>当使用yo 生成一个Ember的项目时， 需要使用compass来编译scss文件。</p>
+<p>Compass is an open-source CSS Authoring Framework.</p>
+<p>所以你需要安装<a href="http://www.ruby-lang.org/en/downloads/" target="_blank" rel="external">Ruby</a>。 同时会把gem安装上。 gem是Ruby的包管理工具， 就像npm之于node.js。<br>然后安装compass:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gem <span class="operator"><span class="keyword">update</span> <span class="comment">--system</span></span></div><div class="line">gem <span class="keyword">install</span> compass</div></pre></td></tr></table></figure>
+
+<p>这样你就能正常编译你的项目了。</p>
+<p>这里有一个根据以上步骤生成的后台管理项目——<a href="https://github.com/smallnest/Ember-Lance" target="_blank" rel="external">Ember-Lance</a>。</p>
+<center><img src="https://raw.githubusercontent.com/smallnest/Ember-Lance/master/snapshot.png" alt="Ember-Lance"></center>
+
+<p>转自：<a href="http://colobu.com/2014/08/29/modern-web-development-tools" target="_blank" rel="external">http://colobu.com/2014/08/29/modern-web-development-tools</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://leol.in/2014/09/04/modern-web-development-tools/" data-title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman) | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/08/01/hello-world/"  title="Hello World">
+ <strong>NEXT:</strong><br/> 
+ <span>Hello World
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number">1.</span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number">2.</span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number">3.</span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number">4.</span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">4.1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number">5.</span> <span class="toc-text">Compass</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/web/" title="web">web<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://leol.in" target="_blank" title="Leolin">Leolin</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
