@@ -4,16 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Leolin杂货小店</title>
+    <title>【笔记】正则表达式 | Leolin杂货小店</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Leolin">
     
-    <meta name="description" content="title: 【笔记】正则表达式の学习date: 2014-09-05 15:51:21
-tags:[web]
+    <meta name="description" content="什么是正则表达式基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
+不同的正则表达式引擎正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。
 
-什么是正则表达式基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
-不同的正则表达式引擎正则引擎可以分为两大">
+
+
+
+引擎类型
+程序
+
+
+
+
+DF">
     
     
     
@@ -71,7 +79,7 @@ tags:[web]
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/09/05/the-study-of-Regex/" title="" itemprop="url"></a>
+      <a href="/2014/09/05/the-study-of-Regex/" title="【笔记】正则表达式" itemprop="url">【笔记】正则表达式</a>
   </h1>
   <p class="article-author">By
     
@@ -79,7 +87,7 @@ tags:[web]
     </p>
   <p class="article-time">
     <time datetime="2014-09-05T07:51:21.000Z" itemprop="datePublished">Sep 5 2014</time>
-    Updated:<time datetime="2014-09-05T07:52:49.000Z" itemprop="dateModified">Sep 5 2014</time>
+    Updated:<time datetime="2014-09-05T07:56:11.000Z" itemprop="dateModified">Sep 5 2014</time>
     
   </p>
 </header>
@@ -88,12 +96,10 @@ tags:[web]
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:[web]"><span class="toc-number">1.</span> <span class="toc-text">tags:[web]</span></a></li></ol>
+		
 		</div>
 		
-		<p>title: 【笔记】正则表达式の学习<br>date: 2014-09-05 15:51:21</p>
-<h2 id="tags:[web]">tags:[web]</h2>
-<ol>
+		<ol>
 <li>什么是正则表达式<br>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。</li>
 <li>不同的正则表达式引擎<br>正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。</li>
 </ol>
@@ -129,22 +135,49 @@ tags:[web]
 </ol>
 <ul>
 <li>特殊字符<br>对于文字字符，有12个字符被保留作特殊用途，称作<code>元字符</code>，分别是：<code>[ ] \ ^ $ . | ? * + ( )</code>。</li>
-<li>不可显示字符<br>|字符|表示|<br>|———|——-|<br>|<code>\t</code>|代表Tab|<br>|<code>\r</code>|代表回车符|<br>|<code>\n</code>|代表换行符|<blockquote>
+<li>不可显示字符</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\t</code></td>
+<td>代表Tab</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>代表回车符</td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>代表换行符</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
 <p>注意：Windows文本使用<code>\r\n</code>来结束一行，Unix使用<code>\n</code>.</p>
 </blockquote>
-</li>
-</ul>
-<p>未完，待续。。。</p>
+<p><strong>未完，待续。。。</strong></p>
   
 	</div>
 		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a>
+  </div>
 
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://leol.in/2014/09/05/the-study-of-Regex/" data-title="Leolin杂货小店" data-tsina="null" class="share clearfix">
+  <div data-url="http://leol.in/2014/09/05/the-study-of-Regex/" data-title="【笔记】正则表达式 | Leolin杂货小店" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -174,7 +207,7 @@ tags:[web]
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:[web]"><span class="toc-number">1.</span> <span class="toc-text">tags:[web]</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
@@ -188,7 +221,7 @@ tags:[web]
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/web/" title="web">web<sup>1</sup></a></li>
+			<li><a href="/tags/web/" title="web">web<sup>2</sup></a></li>
 		
 		</ul>
 </div>
