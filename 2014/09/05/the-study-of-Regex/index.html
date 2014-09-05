@@ -9,19 +9,10 @@
     
     <meta name="author" content="Leolin">
     
-    <meta name="description" content="什么是正则表达式基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
-不同的正则表达式引擎正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。
-
-
-
-
-引擎类型
-程序
-
-
-
-
-DF">
+    <meta name="description" content="什么是正则表达式
+基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
+不同的正则表达式引擎
+正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。不同引擎并不互相兼容，由于作者比较">
     
     
     
@@ -87,7 +78,7 @@ DF">
     </p>
   <p class="article-time">
     <time datetime="2014-09-05T07:51:21.000Z" itemprop="datePublished">Sep 5 2014</time>
-    Updated:<time datetime="2014-09-05T07:56:11.000Z" itemprop="dateModified">Sep 5 2014</time>
+    Updated:<time datetime="2014-09-05T08:03:15.000Z" itemprop="dateModified">Sep 5 2014</time>
     
   </p>
 </header>
@@ -96,13 +87,13 @@ DF">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li></ol>
 		</div>
 		
-		<ol>
-<li>什么是正则表达式<br>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。</li>
-<li>不同的正则表达式引擎<br>正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。</li>
-</ol>
+		<h2 id="什么是正则表达式">什么是正则表达式</h2>
+<p>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。</p>
+<h2 id="不同的正则表达式引擎">不同的正则表达式引擎</h2>
+<p>正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。<br>不同引擎并不互相兼容，由于作者比较常用PHP开发，PHP的三套正则引擎分别是<code>preg</code>、<code>ereg</code>、<code>mb_ereg</code>，其中<code>preg</code>提供的函数在速度方面都强于其余两者。</p>
 <table>
 <thead>
 <tr>
@@ -129,10 +120,8 @@ DF">
 </tr>
 </tbody>
 </table>
-<p>不同引擎并不互相兼容，由于作者比较常用PHP开发，PHP的三套正则引擎分别是<code>preg</code>、<code>ereg</code>、<code>mb_ereg</code>，其中<code>preg</code>提供的函数在速度方面都强于其余两者。</p>
-<ol>
-<li>文字符号<br>最基本的正则表达式由单个文字符号组成，如<code>a</code>，它将匹配字符串中第一次出现的字符<code>a</code>，如    <code>Jack is a boy</code>，<code>J</code>后的<code>a</code>将被匹配，而第二个<code>a</code>将不会被匹配。<br>要注意正则引擎缺省是<strong>大小写敏感</strong>的。</li>
-</ol>
+<h2 id="文字符号">文字符号</h2>
+<p>最基本的正则表达式由单个文字符号组成，如<code>a</code>，它将匹配字符串中第一次出现的字符<code>a</code>，如    <code>Jack is a boy</code>，<code>J</code>后的<code>a</code>将被匹配，而第二个<code>a</code>将不会被匹配。<br>要注意正则引擎缺省是<strong>大小写敏感</strong>的。</p>
 <ul>
 <li>特殊字符<br>对于文字字符，有12个字符被保留作特殊用途，称作<code>元字符</code>，分别是：<code>[ ] \ ^ $ . | ? * + ( )</code>。</li>
 <li>不可显示字符</li>
@@ -207,7 +196,7 @@ DF">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li></ol>
   </div>
 
 <div id="asidepart">
