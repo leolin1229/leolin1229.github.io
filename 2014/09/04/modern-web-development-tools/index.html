@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman) | Leolin杂货小店</title>
+    <title>Leolin杂货小店</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Leolin">
     
-    <meta name="description" content="[toc]
-最近看到javacodegeeks上的一篇文章Node, Grunt, Bower and Yeoman – A Modern web dev’s Toolkit， 文章介绍了一个web开发的工具集。 正好我今年以来也在使用这套工具集开发Web应用程序，也一直想写一篇文章总结一下这套开发">
+    <meta name="description" content="title: 【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)date: 2014-09-04 10:46:57tags: [web]
+[toc]
+最近看到javacodegeeks上的一篇文章Node, Grunt, Bower and Yeoma">
     
     
     
@@ -68,7 +69,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/09/04/modern-web-development-tools/" title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)" itemprop="url">【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)</a>
+      <a href="/2014/09/04/modern-web-development-tools/" title="" itemprop="url"></a>
   </h1>
   <p class="article-author">By
     
@@ -76,7 +77,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-09-04T02:46:57.000Z" itemprop="datePublished">Sep 4 2014</time>
-    Updated:<time datetime="2014-09-04T07:24:29.000Z" itemprop="dateModified">Sep 4 2014</time>
+    Updated:<time datetime="2014-09-05T02:06:47.000Z" itemprop="dateModified">Sep 5 2014</time>
     
   </p>
 </header>
@@ -85,10 +86,11 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number">1.</span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number">2.</span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number">3.</span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number">4.</span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">4.1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number">5.</span> <span class="toc-text">Compass</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#[toc]"><span class="toc-number">1.</span> <span class="toc-text">[toc]</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number"></span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number"></span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number"></span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number"></span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number"></span> <span class="toc-text">Compass</span></a>
 		</div>
 		
-		<p>[toc]</p>
+		<p>title: 【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)<br>date: 2014-09-04 10:46:57<br>tags: [web]</p>
+<h2 id="[toc]">[toc]</h2>
 <p>最近看到javacodegeeks上的一篇文章<a href="http://www.javacodegeeks.com/2014/08/node-grunt-bower-and-yeoman-a-modern-web-devs-toolkit.html" target="_blank" rel="external">Node, Grunt, Bower and Yeoman – A Modern web dev’s Toolkit</a>， 文章介绍了一个web开发的工具集。 正好我今年以来也在使用这套工具集开发Web应用程序，也一直想写一篇文章总结一下这套开发套件的用法，借此机会，参考这篇文章，总结一下我使用这套工具的经验。<br>在的文章中，作者使用angular 框架开发，而我，遵循公司的选择，使用Ember.js作为我的开发框架。同时使用Compass进行SCSS的编译。这些地方会有所不同。</p>
 <p>像Node.js， 已经不算新鲜的玩意了。Node.js第一个版本于2009年发布，现在有很多的公司也采用Node作为后端开发工具。 至于Node.js是否代表先进的开发方向， 目前还有很大的争论。但是基于Node.js的生态圈已经形成，一大波的优秀的的Node.js 模块已经涌现。但是像Grunt, Bower等工具，也有不少的朋友并不了解。所以这篇文章特别介绍一下它们。</p>
 <h1 id="Node_And_NPM">Node And NPM</h1>
@@ -178,17 +180,12 @@
 	</div>
 		<footer class="article-footer clearfix">
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/web/">web</a>
-  </div>
-
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://leol.in/2014/09/04/modern-web-development-tools/" data-title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman) | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  <div data-url="http://leol.in/2014/09/04/modern-web-development-tools/" data-title="Leolin杂货小店" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -209,12 +206,16 @@
 </nav>
 
 	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number">1.</span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number">2.</span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number">3.</span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number">4.</span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">4.1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number">5.</span> <span class="toc-text">Compass</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#[toc]"><span class="toc-number">1.</span> <span class="toc-text">[toc]</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Node_And_NPM"><span class="toc-number"></span> <span class="toc-text">Node And NPM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Node"><span class="toc-number">1.</span> <span class="toc-text">安装Node</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bower"><span class="toc-number"></span> <span class="toc-text">Bower</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Yeoman"><span class="toc-number"></span> <span class="toc-text">Yeoman</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Grunt"><span class="toc-number"></span> <span class="toc-text">Grunt</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装Grunt"><span class="toc-number">1.</span> <span class="toc-text">安装Grunt</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Compass"><span class="toc-number"></span> <span class="toc-text">Compass</span></a>
   </div>
 
 <div id="asidepart">
@@ -228,7 +229,7 @@
 	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/web/" title="web">web<sup>1</sup></a></li>
+			<li><a href="/tags/web/" title="web">web<sup>0</sup></a></li>
 		
 		</ul>
 </div>
@@ -371,6 +372,18 @@ $(document).ready(function(){
 });     
 </script>
 
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 
