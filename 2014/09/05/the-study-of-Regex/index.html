@@ -4,12 +4,16 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | Leolin杂货小店</title>
+    <title>Leolin杂货小店</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Leolin">
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in ">
+    <meta name="description" content="title: 【笔记】正则表达式の学习date: 2014-09-05 15:51:21
+tags:[web]
+
+什么是正则表达式基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
+不同的正则表达式引擎正则引擎可以分为两大">
     
     
     
@@ -67,15 +71,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/08/01/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2014/09/05/the-study-of-Regex/" title="" itemprop="url"></a>
   </h1>
   <p class="article-author">By
     
       <a href="http://leol.in" title="Leolin">Leolin</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-08-01T02:09:08.000Z" itemprop="datePublished">Aug 1 2014</time>
-    Updated:<time datetime="2014-08-01T02:09:08.000Z" itemprop="dateModified">Aug 1 2014</time>
+    <time datetime="2014-09-05T07:51:21.000Z" itemprop="datePublished">Sep 5 2014</time>
+    Updated:<time datetime="2014-09-05T07:52:49.000Z" itemprop="dateModified">Sep 5 2014</time>
     
   </p>
 </header>
@@ -84,27 +88,53 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:[web]"><span class="toc-number">1.</span> <span class="toc-text">tags:[web]</span></a></li></ol>
 		</div>
 		
-		<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+		<p>title: 【笔记】正则表达式の学习<br>date: 2014-09-05 15:51:21</p>
+<h2 id="tags:[web]">tags:[web]</h2>
+<ol>
+<li>什么是正则表达式<br>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。</li>
+<li>不同的正则表达式引擎<br>正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>引擎类型</th>
+<th>程序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DFA</td>
+<td>awk (大多数版本)、egrep(大多数版本)、flex、lex、MySQL、Procmail</td>
+</tr>
+<tr>
+<td>传统型NFA</td>
+<td>GNU Emacs、Java、grep(大多数版本)、less、more、.NET语言、PCRE library、Perl、PHP(所有三套正则库)、Python、Ruby、sed(大多数版本)、vi</td>
+</tr>
+<tr>
+<td>POSIX NFA</td>
+<td>mawk、Mortice Kern Systems’ utilities、GNU Emacs (明确指定时使用)</td>
+</tr>
+<tr>
+<td>DFA/NFA 混合</td>
+<td>GNU awk、GNU grep/egrep、Tcl</td>
+</tr>
+</tbody>
+</table>
+<p>不同引擎并不互相兼容，由于作者比较常用PHP开发，PHP的三套正则引擎分别是<code>preg</code>、<code>ereg</code>、<code>mb_ereg</code>，其中<code>preg</code>提供的函数在速度方面都强于其余两者。</p>
+<ol>
+<li>文字符号<br>最基本的正则表达式由单个文字符号组成，如<code>a</code>，它将匹配字符串中第一次出现的字符<code>a</code>，如    <code>Jack is a boy</code>，<code>J</code>后的<code>a</code>将被匹配，而第二个<code>a</code>将不会被匹配。<br>要注意正则引擎缺省是<strong>大小写敏感</strong>的。</li>
+</ol>
+<ul>
+<li>特殊字符<br>对于文字字符，有12个字符被保留作特殊用途，称作<code>元字符</code>，分别是：<code>[ ] \ ^ $ . | ? * + ( )</code>。</li>
+<li>不可显示字符<br>|字符|表示|<br>|———|——-|<br>|<code>\t</code>|代表Tab|<br>|<code>\r</code>|代表回车符|<br>|<code>\n</code>|代表换行符|<blockquote>
+<p>注意：Windows文本使用<code>\r\n</code>来结束一行，Unix使用<code>\n</code>.</p>
+</blockquote>
+</li>
+</ul>
+<p>未完，待续。。。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -114,7 +144,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://leol.in/2014/08/01/hello-world/" data-title="Hello World | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  <div data-url="http://leol.in/2014/09/05/the-study-of-Regex/" data-title="Leolin杂货小店" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -123,14 +153,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/09/04/modern-web-development-tools/" title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)</span>
+
+<div class="next">
+<a href="/2014/09/04/modern-web-development-tools/"  title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)">
+ <strong>NEXT:</strong><br/> 
+ <span>【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)
+</span>
 </a>
 </div>
-
 
 </nav>
 
@@ -144,7 +174,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags:[web]"><span class="toc-number">1.</span> <span class="toc-text">tags:[web]</span></a></li></ol>
   </div>
 
 <div id="asidepart">
