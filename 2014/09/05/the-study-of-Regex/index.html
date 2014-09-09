@@ -78,7 +78,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-09-05T07:51:21.000Z" itemprop="datePublished">Sep 5 2014</time>
-    Updated:<time datetime="2014-09-05T08:03:15.000Z" itemprop="dateModified">Sep 5 2014</time>
+    Updated:<time datetime="2014-09-09T06:01:29.000Z" itemprop="dateModified">Sep 9 2014</time>
     
   </p>
 </header>
@@ -87,7 +87,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符集"><span class="toc-number">4.</span> <span class="toc-text">字符集</span></a></li></ol>
 		</div>
 		
 		<h2 id="什么是正则表达式">什么是正则表达式</h2>
@@ -151,7 +151,125 @@
 <blockquote>
 <p>注意：Windows文本使用<code>\r\n</code>来结束一行，Unix使用<code>\n</code>.</p>
 </blockquote>
-<p><strong>未完，待续。。。</strong></p>
+<h2 id="字符集">字符集</h2>
+<p>字符集是由一对方括号“[]”括起来的字符集合。</p>
+<ul>
+<li>字符集的一些应用</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>例子</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sep[ae]r[ae]te</code></td>
+<td>查找一个可能有拼写错误的单词</td>
+</tr>
+<tr>
+<td><code>A-Za-z_][A-Za-z_0-9]*</code></td>
+<td>查找程序语言的标识符</td>
+</tr>
+<tr>
+<td><code>0[xX][A-Fa-f0-9]+</code></td>
+<td>查找C风格的十六进制数</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>字符集中的元字符</li>
+</ul>
+<p>在字符集中只有4个字符具有特殊含义，它们是：<code>]</code> <code>\</code> <code>^</code> <code>-</code>。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>]</td>
+<td>代表字符集定义的结束</td>
+</tr>
+<tr>
+<td>\</td>
+<td>代表转义</td>
+</tr>
+<tr>
+<td>^</td>
+<td>代表取反</td>
+</tr>
+<tr>
+<td>-</td>
+<td>代表范围定义</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>取反字符集</li>
+</ul>
+<p>在左方括号<code>[</code>后面紧跟一个尖括号<code>^</code>，将会对字符集取反。</p>
+<blockquote>
+<p>例：<code>q[^u]</code>，匹配一个q，后面跟着一个不是u的字符。</p>
+</blockquote>
+<ul>
+<li>字符集的简写</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>字符集简写</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\d</td>
+<td>[0-9]</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>单词字符</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>“白字符”（空格符，Tab符以及回车换行符\r\n）</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>取反字符集简写</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\D</td>
+<td>[^0-9]</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>[^\w]</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>[^\d]</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>字符集的重复</li>
+</ul>
+<p>如果你用<code>?</code> <code>*</code> <code>+</code>操作符来重复一个字符集，你将会重复整个字符集，而不仅是它匹配的那个字符。</p>
+<blockquote>
+<p>例：<code>[0-9]+</code>会匹配837以及222。</p>
+</blockquote>
+<p><strong><em>未完待续……</em></strong></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -196,7 +314,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符集"><span class="toc-number">4.</span> <span class="toc-text">字符集</span></a></li></ol>
   </div>
 
 <div id="asidepart">
