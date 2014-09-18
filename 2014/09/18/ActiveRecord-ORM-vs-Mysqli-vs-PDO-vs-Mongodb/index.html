@@ -77,7 +77,7 @@ ORM
     </p>
   <p class="article-time">
     <time datetime="2014-09-18T06:51:32.000Z" itemprop="datePublished">Sep 18 2014</time>
-    Updated:<time datetime="2014-09-18T09:51:05.000Z" itemprop="dateModified">Sep 18 2014</time>
+    Updated:<time datetime="2014-09-18T10:46:00.000Z" itemprop="dateModified">Sep 18 2014</time>
     
   </p>
 </header>
@@ -110,6 +110,84 @@ ORM
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$m</span> = <span class="keyword">new</span> MongoClient();</div><div class="line"><span class="variable">$cl</span> = <span class="variable">$m</span><span class="variable">-&gt;selectCollection</span>(<span class="string">'users'</span>, <span class="string">'money'</span>);</div><div class="line"><span class="keyword">for</span> (<span class="variable">$i</span>=<span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">5000</span>; <span class="variable">$i</span>++) { </div><div class="line">	<span class="variable">$cl</span><span class="variable">-&gt;insert</span>(<span class="keyword">array</span>(<span class="string">'money'</span> =&gt; <span class="number">100</span>));</div><div class="line">}</div></pre></td></tr></table></figure>
 
 <p><strong>用时：0.62403583526611 seconds</strong><br>Wow!!!</p>
+<table>
+<thead>
+<tr>
+<th>The access method</th>
+<th>Time(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ORM</td>
+<td>169.00066614151</td>
+</tr>
+<tr>
+<td>MySqli</td>
+<td>119.14581513405</td>
+</tr>
+<tr>
+<td>MySqli(without prepare)</td>
+<td>115.37659907341</td>
+</tr>
+<tr>
+<td>PDO</td>
+<td>119.92485904694</td>
+</tr>
+<tr>
+<td>MongoDB</td>
+<td>0.62403583526611</td>
+</tr>
+</tbody>
+</table>
+<p><strong>总结：</strong></p>
+<ol>
+<li>我们总是讨论要不要用ORM，我觉得这个要视乎你的项目（后面讨论到）</li>
+<li>对于PDO和MySqli，必然优先选择PDO方式，那一点点额外的时间消耗算什么</li>
+</ol>
+<hr>
+<p>PS：<br><strong>ORM的介绍</strong><br>ORM（Object Relational Mapping，对象关系映射）是一种在不同的数据库之上封装并提供一个统一的操作接口的技术。ORM能够为用户提供统一的OO接口, 是 DAL（Data Access Layer, 数据访问接口）的一种实现方式.</p>
+<p><strong>ORM通常用于:</strong></p>
+<ol>
+<li>熟悉OO但不熟悉sql的程序员</li>
+<li>对sql性能要求不是太迫近</li>
+<li>有数据库迁移的需求</li>
+<li>知道ORM的底层的实现</li>
+</ol>
+<p><strong>ORM的好处</strong></p>
+<ol>
+<li>提高开发效率,提高代码健状程度</li>
+<li>为程序员提供一个完整的,统一的OO访问的接口, 使得程序员更加专注于事务逻辑而非DB的细节</li>
+<li>让程序员可以站在 一定的高度 (通常是可以看到影响应用性能的全局的问题),而进行全局的优化,而不至于陷入到 微优化 的trap中</li>
+<li>随着ORM框架的演进, 会提供愈加完善,高性能的支持</li>
+<li>简单,高效的数据库迁移</li>
+</ol>
+<p><strong>ORM的不足</strong></p>
+<ol>
+<li>性能的损失<blockquote>
+<p>ORM最终还是将一些OO操作映射到具体的sql语句,继而由DB执行, 因而sql语句的效率取决于ORM本身映射的实现,显然sql的透明性和灵活性已经失去</p>
+</blockquote>
+</li>
+<li>程序员依赖于ORM,而失去了 关键资源的控制权<blockquote>
+<p>在性能要求很高时, DB的控制权则是关键资源, 而由ORM来 黑盒 (对于大多数程序员而言) 地转发sql显然是一种高风险的行为</p>
+</blockquote>
+</li>
+<li>学习成本<blockquote>
+<p>如果程序员又要使用ORM又不想牺牲效率, 这时一种选择即是探究ORM的底层实现,知道哪些操作是 expensive 的,但是显然相比于只对sql的掌握,阅读ORM的源码的成本会更高,况且在知道了其内部原理后仍需熟悉sql</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>结论</strong><br>满足下面特征的应用推荐使用ORM</p>
+<ol>
+<li>开发时间要求紧迫</li>
+<li>有数据库迁移需求</li>
+<li>了解ORM的内部实现</li>
+</ol>
+<p>而满足下面特征的应用则推荐使用原生sql来开发:</p>
+<ol>
+<li>效率要求高</li>
+<li>无数据库迁移需求</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
