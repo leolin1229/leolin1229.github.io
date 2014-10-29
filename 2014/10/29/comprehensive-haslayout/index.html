@@ -1,0 +1,377 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>【转】hasLayout综合 | Leolin杂货小店</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Leolin">
+    
+    <meta name="description" content="要想更好的理解 css， 尤其是 IE 下对 css 的渲染，haslayout 是一个非常有必要彻底弄清除的概念。大多IE下的显示错误，就是源于 haslayout。
+什么是 haslayout ？
+haslayout 是Windows Internet Explorer渲染引擎的一个内部组成部分">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Leolin杂货小店" title="Leolin杂货小店"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Leolin杂货小店">Leolin杂货小店</a></h1>
+				<h2 class="blog-motto">杂七杂八</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:leol.in">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/10/29/comprehensive-haslayout/" title="【转】hasLayout综合" itemprop="url">【转】hasLayout综合</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://leol.in" title="Leolin">Leolin</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-10-29T07:06:12.000Z" itemprop="datePublished">Oct 29 2014</time>
+    Updated:<time datetime="2014-10-29T07:14:08.000Z" itemprop="dateModified">Oct 29 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是_haslayout_？"><span class="toc-number">1.</span> <span class="toc-text">什么是 haslayout ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何激发_haslayout？"><span class="toc-number">2.</span> <span class="toc-text">如何激发 haslayout？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haslayout_问题的调试与解决"><span class="toc-number">3.</span> <span class="toc-text">haslayout 问题的调试与解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haslayout问题引起的常见bug"><span class="toc-number">4.</span> <span class="toc-text">haslayout问题引起的常见bug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IE6及更低版本的双空白边浮动_bug"><span class="toc-number">4.1.</span> <span class="toc-text">IE6及更低版本的双空白边浮动 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE5-6/win的3像素偏移_bug"><span class="toc-number">4.2.</span> <span class="toc-text">IE5-6/win的3像素偏移 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE6的躲躲猫(peek-a-boo)_bug"><span class="toc-number">4.3.</span> <span class="toc-text">IE6的躲躲猫(peek-a-boo) bug</span></a></li></ol></li></ol>
+		</div>
+		
+		<p>要想更好的理解 css， 尤其是 IE 下对 css 的渲染，haslayout 是一个非常有必要彻底弄清除的概念。大多IE下的显示错误，就是源于 haslayout。</p>
+<h2 id="什么是_haslayout_？">什么是 haslayout ？</h2>
+<p>haslayout 是Windows Internet Explorer渲染引擎的一个内部组成部分。在Internet Explorer中，一个元素要么自己对自身的内容进行计算大小和组织，要么依赖于父元素来计算尺寸和组织内容。为了调节这两个不同的概念，渲染引擎采用了 hasLayout 的属性，属性值可以为true或false。当一个元素的 hasLayout 属性值为true时，我们说这个元素有一个布局（layout）</p>
+<p>当一个元素有一个布局时，它负责对自己和可能的子孙元素进行尺寸计算和定位。简单来说，这意味着这个元素需要花更多的代价来维护自身和里面的内容，而不是依赖于祖先元素来完成这些工作。因此，一些元素默认会有一个布局。当我们说一个元素“拥有layout”或“得到layout”，或者说一个元素“has layout” 的时候，我们的意思是指它的微软专有属性 hasLayout 被设为了 true 。一个“layout元素”可以是一个默认就拥有 layout 的元素或者是一个通过设置某些 CSS 属性得到 layout 的元素。如果某个HTML元素拥有 haslayout 属性，那么这个元素的 haslayout 的值一定只有 true，haslayout 为只读属性 一旦被触发，就不可逆转。通过 IE Developer Toolbar 可以查看 IE 下 HTML 元素是否拥有haslayout，在 IE Developer Toolbar 下，拥有 haslayout 的元素，通常显示为“haslayout = -1”。</p>
+<p>负责组织自身内容的元素将默认有一个布局，主要包括以下元素（不完全列表）：</p>
+<blockquote>
+<ul>
+<li>body and html</li>
+<li>table, tr, th, td</li>
+<li>img</li>
+<li>hr</li>
+<li>input, button, file, select, textarea, fieldset</li>
+<li>marquee</li>
+<li>frameset, frame, iframe</li>
+<li>objects, applets, embed</li>
+</ul>
+</blockquote>
+<p>对于并非所有的元素都默认有布局，微软给出的主要原因是“性能和简洁”。如果所有的元素都默认有布局，会对性能和内存使用上产生有害的影响。</p>
+<h2 id="如何激发_haslayout？">如何激发 haslayout？</h2>
+<p>大部分的 IE 显示错误，都可以通过激发元素的 haslayout 属性来修正。可以通过设置 css 尺寸属性(width/height)等来激发元素的 haslayout，使其“拥有布局”。如下所示，通过设置以下 css 属性即可。</p>
+<blockquote>
+<ul>
+<li>display: inline-block</li>
+<li>height: (任何值除了auto)</li>
+<li>float: (left 或 right)</li>
+<li>position: absolute</li>
+<li>width: (任何值除了auto)</li>
+<li>writing-mode: tb-rl</li>
+<li>zoom: (除 normal 外任意值)</li>
+</ul>
+</blockquote>
+<p>Internet Explorer 7 还有一些额外的属性(不完全列表):</p>
+<blockquote>
+<ul>
+<li>min-height: (任意值)</li>
+<li>max-height: (除 none 外任意值)</li>
+<li>min-width: (任意值)</li>
+<li>max-width: (除 none 外任意值)</li>
+<li>overflow: (除 visible 外任意值)</li>
+<li>overflow-x: (除 visible 外任意值)</li>
+<li>overflow-y: (除 visible 外任意值)</li>
+<li>position: fixed</li>
+</ul>
+</blockquote>
+<p>其中 overflow-x 和 overflow-y 是 css3 盒模型中的属性，目前还未被浏览器广泛支持。</p>
+<p>对于内联元素(默认即为内联的元素，如 span，或 display:inline; 的元素)，</p>
+<ul>
+<li>width 和 height 只在 IE5.x 下和 IE6 或更新版本的 quirks 模式下触发 hasLayout 。而对于 IE6，如果浏览器运行于标准兼容模式下，内联元素会忽略 width 或 height 属性，所以设置 width 或 height 不能在此种情况下令该元素具有 layout。</li>
+<li>zoom 总是可以触发 hasLayout，但是在 IE5.0 中不支持。</li>
+</ul>
+<p>具有“layout” 的元素如果同时 display: inline ，那么它的行为就和标准中所说的 inline-block 很类似了：在段落中和普通文字一样在水平方向和连续排列，受 vertical-align 影响，并且大小可以根据内容自适应调整。这也可以解释为什么单单在 IE/Win 中内联元素可以包含块级元素而少出问题，因为在别的浏览器中 display: inline 就是内联，不像 IE/Win 一旦内联元素拥有 layout 还会变成 inline-block。</p>
+<h2 id="haslayout_问题的调试与解决">haslayout 问题的调试与解决</h2>
+<p>当网页在 IE 中有异常表现时，可以尝试激发 haslayout 来看看是不是问题所在。常用的方法是给某元素 css 设定 zoom:1 。使用 zoom:1 是因为大多数情况下，它能在不影响现有环境的条件下激发元素的 haslayout。而一旦问题消失，那基本上就可以判断是 haslayout 的原因。然后就可以通过设定相应的 css 属性来对这个问题进行修正了。建议首先要考虑的是设定元素的 width/height 属性，其次再考虑其他属性。</p>
+<p>对IE6及更早版本来说，常用的方法被称为霍莉破解(Holly hack)，即设定这个元素的高度为 1% (height:1%;)。需要注意的是，当这个元素的 overflow 属性被设置为 visible 时，这个方法就失效了。或者使用 IE 的条件注释。</p>
+<p>对IE7来说，最好的方法时设置元素的最小高度为0(min-height:0;)。</p>
+<h2 id="haslayout问题引起的常见bug">haslayout问题引起的常见bug</h2>
+<h3 id="IE6及更低版本的双空白边浮动_bug">IE6及更低版本的双空白边浮动 bug</h3>
+<p>bug 修复: display:inline;</p>
+<h3 id="IE5-6/win的3像素偏移_bug">IE5-6/win的3像素偏移 bug</h3>
+<p>bug 修复: _height:1%;</p>
+<h3 id="IE6的躲躲猫(peek-a-boo)_bug">IE6的躲躲猫(peek-a-boo) bug</h3>
+<p>bug修复: _height:1%;</p>
+<hr>
+<p>转自<a href="http://www.qianduan.net/comprehensive-haslayout.html" target="_blank" rel="external">http://www.qianduan.net/comprehensive-haslayout.html</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a><a href="/tags/IE/">IE</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://leol.in/2014/10/29/comprehensive-haslayout/" data-title="【转】hasLayout综合 | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/10/23/Native-methods-jquery/"  title="【译】jQuery函数的原生实现">
+ <strong>NEXT:</strong><br/> 
+ <span>【译】jQuery函数的原生实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是_haslayout_？"><span class="toc-number">1.</span> <span class="toc-text">什么是 haslayout ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何激发_haslayout？"><span class="toc-number">2.</span> <span class="toc-text">如何激发 haslayout？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haslayout_问题的调试与解决"><span class="toc-number">3.</span> <span class="toc-text">haslayout 问题的调试与解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haslayout问题引起的常见bug"><span class="toc-number">4.</span> <span class="toc-text">haslayout问题引起的常见bug</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IE6及更低版本的双空白边浮动_bug"><span class="toc-number">4.1.</span> <span class="toc-text">IE6及更低版本的双空白边浮动 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE5-6/win的3像素偏移_bug"><span class="toc-number">4.2.</span> <span class="toc-text">IE5-6/win的3像素偏移 bug</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IE6的躲躲猫(peek-a-boo)_bug"><span class="toc-number">4.3.</span> <span class="toc-text">IE6的躲躲猫(peek-a-boo) bug</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/IE/" title="IE">IE<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web/" title="web">web<sup>5</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://leol.in" target="_blank" title="Leolin">Leolin</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
