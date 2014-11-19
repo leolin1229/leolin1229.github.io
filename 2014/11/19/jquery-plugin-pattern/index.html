@@ -1,0 +1,421 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>【转】jQuery Plugin Pattern | Leolin杂货小店</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Leolin">
+    
+    <meta name="description" content="jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts in ">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Leolin杂货小店" title="Leolin杂货小店"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Leolin杂货小店">Leolin杂货小店</a></h1>
+				<h2 class="blog-motto">杂七杂八</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:leol.in">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/11/19/jquery-plugin-pattern/" title="【转】jQuery Plugin Pattern" itemprop="url">【转】jQuery Plugin Pattern</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://leol.in" title="Leolin">Leolin</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-11-19T09:21:21.000Z" itemprop="datePublished">Nov 19 2014</time>
+    Updated:<time datetime="2014-11-19T09:56:00.189Z" itemprop="dateModified">Nov 19 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Two_jQuery_Plugin_Types"><span class="toc-number">1.</span> <span class="toc-text">Two jQuery Plugin Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Limit_The_Scope"><span class="toc-number">2.</span> <span class="toc-text">Limit The Scope</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_Dollar_Sign"><span class="toc-number">3.</span> <span class="toc-text">The Dollar Sign</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Plugin_Parameters_and_Defaults"><span class="toc-number">4.</span> <span class="toc-text">Plugin Parameters and Defaults</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_this_Expression"><span class="toc-number">5.</span> <span class="toc-text">The this Expression</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The_this_expression_for_plugins_that_do_not_work_on_an_element"><span class="toc-number">5.1.</span> <span class="toc-text">The this expression for plugins that do not work on an element</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The_this_expression_for_plugins_that_do_work_on_an_element"><span class="toc-number">5.2.</span> <span class="toc-text">The this expression for plugins that do work on an element</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jQuery_Chaining_Principal"><span class="toc-number">6.</span> <span class="toc-text">jQuery Chaining Principal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User_Interface"><span class="toc-number">7.</span> <span class="toc-text">User Interface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">8.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo_&_Download"><span class="toc-number">9.</span> <span class="toc-text">Demo & Download</span></a></li></ol>
+		</div>
+		
+		<p>jQuery plugin is an extension to jQuery that encapsulates an ability or visual behaveiour so that it can be used later and in many different parts in a web application. This article will explain the basics of jQuery plugin and guide you how to create a simple jQuery plugin.</p>
+<hr>
+<h2 id="Two_jQuery_Plugin_Types">Two jQuery Plugin Types</h2>
+<p>I distinguish between two types of of jQuery plugins:</p>
+<p><strong>Plugin that works on element. </strong>For example, a plugin that converts <code>select</code> element to an autocomplete. Such plugin is working on the select element. This kind of plugin is actually extention to the jQuery prototype (or $.fn):</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.fn.myPlugin = <span class="keyword">function</span>() {</div><div class="line">  <span class="keyword">...</span> //plugin content</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Invocation of such plugins looks like:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$(</span><span class="string">'#my-elem'</span>).myPlugin();</div></pre></td></tr></table></figure>
+
+<p><strong>Plugin that doesn’t work on element. </strong><a href="http://docs.jquery.com/Utilities" target="_blank" rel="external">The utilities of jQuery</a> are good examples for such plugin. They are actually functions that located in the jQuery object (or $):</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$.myPlugin = <span class="keyword">function</span>() {</div><div class="line">  <span class="keyword">...</span> //plugin content</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Invocation of such plugins looks like:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$.</span>myPlugin();</div></pre></td></tr></table></figure>
+
+<p>Both types of plugins can get data as input, make DOM manipulations, make calculations, let the user interact them and much more.</p>
+<h2 id="Limit_The_Scope">Limit The Scope</h2>
+<p>Usually when writing jQuery plugin (or any JavaScript code), it is a good idea to limit it’s scope. This way you can prevent access to private variables and functions. In addition, using scopes may helping prevent naming conflicts. In order to limit the scope of jQuery plugin, wrap it with a function and invoke it. For example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">function</span>() {</div><div class="line">  $.fn.myPlugin = <span class="keyword">function</span>() {</div><div class="line">      <span class="keyword">...</span> //plugin content</div><div class="line">  }</div><div class="line">})();</div></pre></td></tr></table></figure>
+
+<p>This is called <a href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank" rel="external">Immediately-Invoked Function Expression (IIFE)</a>.</p>
+<h2 id="The_Dollar_Sign">The Dollar Sign</h2>
+<p>The dollar sign ($) is a synonym to the jQuery library. It is shorter and look better then the “jQuery” word. Because of that, there are many other libraries that make a use with the dollar sign as a synonym. So, we have to be sure our plugin doesn’t collide with other libraries. Therefore passing jQuery as a parameter to the IIFE is a best practice:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">function</span>($) {</div><div class="line">    $.fn.myPlugin = <span class="keyword">function</span>() { // Here we sure $ is jQuery</div><div class="line">      <span class="keyword">...</span> // Plugin content</div><div class="line">    }</div><div class="line">})(jQuery);</div></pre></td></tr></table></figure>
+
+<h2 id="Plugin_Parameters_and_Defaults">Plugin Parameters and Defaults</h2>
+<p>We can pass parameters to our plugin when calling it, for example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).myPlugin(param1, param2, param3);</div></pre></td></tr></table></figure>
+
+<p>But, sometimes our plugin will have a lot of parameters (for instance, <a href="http://www.trirand.com/blog/" target="_blank" rel="external">jqGrid</a> plugin has more then 20 parameters) and some of them might be optionals. For this reason we wrap all the parameters in an object. For example, assume our plugin gets parameters “name”, “address” and “color”, we will define our plugin:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$.fn.myPlugin = <span class="keyword">function</span>(options) { <span class="keyword">...</span> }</div></pre></td></tr></table></figure>
+
+<p>and for calling it:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).myPlugin({</div><div class="line">  name: <span class="string">'Naor'</span>,</div><div class="line">  address: <span class="string">'Jerusalem'</span>,</div><div class="line">  <span class="keyword">color</span>: <span class="string">'Green'</span></div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>This way the user can supply only the parameters he wants. But this leads to another problem. What if the plugin need the color parameter which wasn’t supplied? The solution is simple. All we have to do is to make a defaults to the parameters:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">function</span>($) {</div><div class="line">  $.fn.myPlugin = <span class="keyword">function</span>(options) {</div><div class="line">      options = $.extend({</div><div class="line">          name: <span class="string">'no-name'</span>,</div><div class="line">          address: <span class="string">'none'</span>,</div><div class="line">          color: <span class="string">'white'</span></div><div class="line">      }, options);</div><div class="line">      <span class="keyword">...</span> // The rest of the plugin</div><div class="line">  }</div><div class="line">})(jQuery);</div></pre></td></tr></table></figure>
+
+<p>This way we support many options with optional parameters.<br>In case we want to force the user pass some parameters, we can use the old way for the compulsory parameters and an “options” object for the optionals:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// param1 is compulsory</div><div class="line">$.fn.myPlugin = <span class="keyword">function</span>(param1, options) { <span class="keyword">...</span> }</div></pre></td></tr></table></figure>
+
+<h2 id="The_this_Expression">The <em>this</em> Expression</h2>
+<p>Inside a plugin definition the this expression has a different meaning between the two plugin types. I’ll explain the meaning of the this expression using examples:</p>
+<h3 id="The_this_expression_for_plugins_that_do_not_work_on_an_element">The <em>this</em> expression for plugins that do not work on an element</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="doctype">&lt;!doctype html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">head</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">title</span>&gt;</span>jQuery Plugins<span class="tag">&lt;/<span class="title">title</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"../assets/js/jquery-1.9.0.min.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">          (<span class="function"><span class="keyword">function</span><span class="params">($)</span> </span>{</div><div class="line">              $.myPlugin = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">                  <span class="comment">// Here &lt;i&gt;this&lt;/i&gt; represents the jQuery object</span></div><div class="line">                  <span class="keyword">return</span> $ === <span class="keyword">this</span>;</div><div class="line">              };</div><div class="line">          })(jQuery);</div><div class="line">      <span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="title">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">body</span>&gt;</span></div><div class="line">      Is <span class="tag">&lt;<span class="title">i</span>&gt;</span>this<span class="tag">&lt;/<span class="title">i</span>&gt;</span> equals jQuery? <span class="tag">&lt;<span class="title">span</span> <span class="attribute">id</span>=<span class="value">"isEqual"</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">          $(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">              $(<span class="string">'#isEqual'</span>).text($.myPlugin());</div><div class="line">          });</div><div class="line">      <span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="title">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>Notice that inside such plugin, <em>this</em> is equal to jQuery. You can watch this example <a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/this-expression/this1.html" target="_blank" rel="external">here</a>.</p>
+<h3 id="The_this_expression_for_plugins_that_do_work_on_an_element">The <em>this</em> expression for plugins that do work on an element</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">﻿<span class="doctype">&lt;!doctype html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">head</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">title</span>&gt;</span>jQuery Plugins<span class="tag">&lt;/<span class="title">title</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"../assets/js/jquery-1.9.0.min.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">          (<span class="function"><span class="keyword">function</span><span class="params">($)</span> </span>{</div><div class="line">              $.fn.myPlugin = <span class="function"><span class="keyword">function</span><span class="params">(text)</span> </span>{</div><div class="line">                  <span class="comment">// Here &lt;i&gt;this&lt;/i&gt; is a reference to the actaul jQuery</span></div><div class="line">                  <span class="comment">// element the plugin works on.</span></div><div class="line">                  <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">                      <span class="keyword">var</span> current = $(<span class="keyword">this</span>);</div><div class="line">                      <span class="keyword">var</span> elemType = current.prop(<span class="string">'tagName'</span>).toLowerCase();</div><div class="line">                      <span class="keyword">switch</span>(elemType)  {</div><div class="line">                          <span class="keyword">case</span> <span class="string">'input'</span>:</div><div class="line">                              current.val(text);</div><div class="line">                              <span class="keyword">break</span>;</div><div class="line">                          <span class="keyword">case</span> <span class="string">'select'</span>:</div><div class="line">                              current.empty().append(<span class="string">'&lt;option&gt;'</span> + text + <span class="string">'&lt;/option&gt;'</span>);</div><div class="line">                              <span class="keyword">break</span>;</div><div class="line">                          <span class="keyword">case</span> <span class="string">'span'</span>:</div><div class="line">                              current.text(text);</div><div class="line">                              <span class="keyword">break</span>;</div><div class="line">                      }</div><div class="line"></div><div class="line">                  });</div><div class="line">              };</div><div class="line">          })(jQuery);</div><div class="line">      <span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="title">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="title">body</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">p</span>&gt;</span></div><div class="line">          Choose text: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">id</span>=<span class="value">"my-text"</span> /&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="title">button</span> <span class="attribute">id</span>=<span class="value">"my-button"</span>&gt;</span>Press here<span class="tag">&lt;/<span class="title">button</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="title">p</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="title">p</span>&gt;</span></div><div class="line">          Span: <span class="tag">&lt;<span class="title">span</span> <span class="attribute">class</span>=<span class="value">"target"</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span> <span class="tag">&lt;<span class="title">br</span>/&gt;</span></div><div class="line">          Text input: <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">class</span>=<span class="value">"target"</span> /&gt;</span> <span class="tag">&lt;<span class="title">br</span>/&gt;</span></div><div class="line">          Select: <span class="tag">&lt;<span class="title">select</span> <span class="attribute">class</span>=<span class="value">"target"</span>&gt;</span><span class="tag">&lt;/<span class="title">select</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="title">p</span>&gt;</span></div><div class="line"></div><div class="line">      <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">          $(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">              $(<span class="string">'#my-button'</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">                  <span class="keyword">var</span> text = $(<span class="string">'#my-text'</span>).val();</div><div class="line">                  $(<span class="string">'.target'</span>).myPlugin(text);</div><div class="line">              });</div><div class="line">          });</div><div class="line">      <span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="title">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>Notice that <em>this</em> is a reference to the main element that the plugin works on. Sometimes, like in this example, the jQuery element represents more then one DOM element and we have to iterate each one of them in order to effect all of the DOM elements. In this example each DOM element is different element and so different treatment. You can watch this example here.</p>
+<h2 id="jQuery_Chaining_Principal">jQuery Chaining Principal</h2>
+<p><strong>jQuery Chaining Principal is relevant only to plugins that do work on an element.</strong></p>
+<p>Take this code for example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).addClass(<span class="string">'active'</span>);</div><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).val(<span class="string">'some value'</span>);</div><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).prop(<span class="string">'disabled'</span>, <span class="keyword">true</span>);</div></pre></td></tr></table></figure>
+
+<p>This code adds css class to an element, sets its value and disables it. Instead of three different lines of code we can write: I believe you’ve seen this syntax before:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$(</span><span class="string">'#elem'</span>).addClass(<span class="string">'active'</span>).val(<span class="string">'some value'</span>).prop(<span class="string">'disabled'</span>, <span class="keyword">true</span>);</div></pre></td></tr></table></figure>
+
+<p>This looks better, easier to understand and more effective (no need to search for ‘#elem’ a few times). This is made possible due to the jQuery chaining principal. Each jQuery method or plugin returns the element or elements that it works on:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">(<span class="keyword">function</span>($) {</div><div class="line">    $.fn.myPlugin = <span class="keyword">function</span>(options) {</div><div class="line">        <span class="keyword">...</span></div><div class="line">        <span class="keyword">...</span></div><div class="line">        <span class="keyword">return</span> this; // This line responsible <span class="keyword">for</span> chaining</div><div class="line">    }</div><div class="line">})(jQuery);</div></pre></td></tr></table></figure>
+
+<p>Remember that inside the plugin scope, the <em>this</em> expression referenced to the element itself.</p>
+<h2 id="User_Interface">User Interface</h2>
+<p>Up to now we saw a plugin structure wrapped in IIFE, with $ as jQuery and with compulsory/optional parameters. We undertsood the this expression inside a plugin and saw the chaining principal in action. Now we need to see how to create an interface so the user can interact with the plugin. I’ll do it separately for each plugin type.</p>
+<p><strong>Plugin that doesn’t work on element</strong></p>
+<p>The first plugin doesn’t work on element, it gets positions and a text as parameters and displays the text on the specified position:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">  $.float = function<span class="list">(<span class="title">posX</span>, posY, text)</span> {</div><div class="line">      $<span class="list">(<span class="quoted">'&lt;div&gt;</span><span class="quoted">'+text+</span><span class="quoted">'&lt;/div&gt;</span>')</span>.appendTo<span class="list">(<span class="quoted">'body</span>')</span>.css<span class="list">({</span></div><div class="line">          left: posX,</div><div class="line">          top: posY,</div><div class="line">          position: <span class="quoted">'absolute</span>'</div><div class="line">      })<span class="comment">;</span></div><div class="line">  }    </div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Now we want to allow the user to move the text to a new position and to remove it. Let’s write methods:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">    function changePosition<span class="list">(<span class="title">elem</span>, posX, posY)</span> {</div><div class="line">        elem.css<span class="list">({</span></div><div class="line">            left: posX,</div><div class="line">            top: posY</div><div class="line">        })<span class="comment">;</span></div><div class="line">    }</div><div class="line">    function remove<span class="list">(<span class="title">elem</span>)</span> {</div><div class="line">        elem.remove<span class="list">()</span><span class="comment">;</span></div><div class="line">    }</div><div class="line">    $.float = function<span class="list">(<span class="title">posX</span>, posY, text)</span> {</div><div class="line">        $<span class="list">(<span class="quoted">'&lt;div&gt;</span><span class="quoted">'+text+</span><span class="quoted">'&lt;/div&gt;</span>')</span>.appendTo<span class="list">(<span class="quoted">'body</span>')</span>.css<span class="list">({</span></div><div class="line">            left: posX,</div><div class="line">            top: posY,</div><div class="line">            position: <span class="quoted">'absolute</span>'</div><div class="line">        })<span class="comment">;</span></div><div class="line">    }</div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Notice that the user doesn’t have an access to “changePosition” nor “remove” and he never holds the <code>&lt;div&gt;</code> element. So now we need to connect the user to the methods. In order to do it we make the “float” plugin return a “remote control” object:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">  function changePosition<span class="list">(<span class="title">elem</span>, posX, posY)</span> {</div><div class="line">      elem.css<span class="list">({</span></div><div class="line">          left: posX,</div><div class="line">          top: posY</div><div class="line">      })<span class="comment">;</span></div><div class="line">  }</div><div class="line">  function remove<span class="list">(<span class="title">elem</span>)</span> {</div><div class="line">      elem.remove<span class="list">()</span><span class="comment">;</span></div><div class="line">  }</div><div class="line">  $.float = function<span class="list">(<span class="title">posX</span>, posY, text)</span> {</div><div class="line">      var elem = $<span class="list">(<span class="quoted">'&lt;div&gt;</span><span class="quoted">'+text+</span><span class="quoted">'&lt;/div&gt;</span>')</span>.appendTo<span class="list">(<span class="quoted">'body</span>')</span>.css<span class="list">({</span></div><div class="line">          left: posX,</div><div class="line">          top: posY,</div><div class="line">          position: <span class="quoted">'absolute</span>'</div><div class="line">      })<span class="comment">;   </span></div><div class="line">      return {</div><div class="line">          changePosition: function<span class="list">(<span class="title">posX</span>, posY)</span> {</div><div class="line">              changePosition<span class="list">(<span class="title">elem</span>, posX, posY)</span><span class="comment">;</span></div><div class="line">          },</div><div class="line">          remove: function<span class="list">()</span> { remove<span class="list">(<span class="title">elem</span>)</span><span class="comment">; }</span></div><div class="line">      }<span class="comment">;</span></div><div class="line">  }    </div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Now, whenever the user will invoke $.float(..) he will get a “remote control” object with the interface we want to provide, and in order to use it:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var <span class="keyword">control</span> = <span class="variable">$.</span><span class="keyword">float</span>(<span class="string">'100px'</span>, <span class="string">'100px'</span>, <span class="string">'Hello!'</span>);</div><div class="line"><span class="keyword">control</span>.changePosition(<span class="string">'200px'</span>, <span class="string">'200px'</span>);</div></pre></td></tr></table></figure>
+
+<p>Live example for the float plugin you can find <a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/float-plugin/float.html" target="_blank" rel="external">here</a>.</p>
+<p><strong>Plugin that does work on element</strong></p>
+<p>The second plugin does work on element. It works on an <code>&lt;input&gt;</code> element and gets two parameters: <code>&lt;ul&gt;</code> selector and a number “N”. Whenever the input’s value changes, the <code>&lt;ul&gt;</code> gets filled with “N” items containing the value:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">  $.fn.compose = function<span class="list">(<span class="title">options</span>)</span> {</div><div class="line">      options = $.extend<span class="list">({</span></div><div class="line">          number: <span class="number">2</span>,</div><div class="line">          ul: null</div><div class="line">      }, options)<span class="comment">;</span></div><div class="line">      </div><div class="line">      this.change<span class="list">(<span class="title">function</span><span class="list">()</span> {</span></div><div class="line">          if <span class="list">(<span class="title">options</span>.ul !== null)</span> {</div><div class="line">              var value = $<span class="list">(<span class="title">this</span>)</span>.val<span class="list">()</span><span class="comment">;</span></div><div class="line">              var ul = $<span class="list">(<span class="title">options</span>.ul)</span>.empty<span class="list">()</span><span class="comment">;</span></div><div class="line">              for<span class="list">(<span class="title">var</span> i=<span class="number">0</span><span class="comment">;i&lt;options.number;i++) {</span></span></div><div class="line">                  ul.append<span class="list">(<span class="quoted">'&lt;li&gt;</span>' + value + <span class="quoted">'&lt;/li&gt;</span>')</span></div><div class="line">              }            </div><div class="line">          }</div><div class="line">      })<span class="comment">;</span></div><div class="line">      </div><div class="line">      return this<span class="comment">;</span></div><div class="line">  }</div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Now we want to allow the user to change the number parameter “N”. Again, let’s write a method for changing the parameter:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">  $.fn.compose = function<span class="list">(<span class="title">options</span>)</span> {</div><div class="line">      options = $.extend<span class="list">({</span></div><div class="line">          number: <span class="number">2</span>,</div><div class="line">          ul: null</div><div class="line">      }, options)<span class="comment">;</span></div><div class="line">      </div><div class="line">      function setNumber<span class="list">(<span class="title">number</span>)</span> {</div><div class="line">          options.number = number<span class="comment">;</span></div><div class="line">      }</div><div class="line">      </div><div class="line">      this.change<span class="list">(<span class="title">function</span><span class="list">()</span> {</span></div><div class="line">          if <span class="list">(<span class="title">options</span>.ul !== null)</span> {</div><div class="line">              var value = $<span class="list">(<span class="title">this</span>)</span>.val<span class="list">()</span><span class="comment">;</span></div><div class="line">              var ul = $<span class="list">(<span class="title">options</span>.ul)</span>.empty<span class="list">()</span><span class="comment">;</span></div><div class="line">              for<span class="list">(<span class="title">var</span> i=<span class="number">0</span><span class="comment">;i&lt;options.number;i++) {</span></span></div><div class="line">                  ul.append<span class="list">(<span class="quoted">'&lt;li&gt;</span>' + value + <span class="quoted">'&lt;/li&gt;</span>')</span></div><div class="line">              }            </div><div class="line">          }</div><div class="line">      })<span class="comment">;</span></div><div class="line">      </div><div class="line">      return this<span class="comment">;</span></div><div class="line">  }</div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Like the former plugin example, the user doesn’t have an access to “setNumber” method. Unlike the former plugin example, here we cannot return a “remote control” object. Due to jQuery chaining principal we have to return this. For solving this we use <a href="http://api.jquery.com/jQuery.data/" target="_blank" rel="external">jQuery.data()</a> method. This method allows us attach key-value data to an element. For example, $(‘#elem’).data(‘my-color’, ‘Green’); attaches the “my-color = Green” key-value to the element. In order to get the value of “my-color” all we have to do is: $(‘#elem’).data(‘my-color’) and we get “Green”. So we use the jQuery.data() method to attach the “remote control” object to the element, and as a key we use the name of the plugin “compose”:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">function</span><span class="list">($)</span> {</span></div><div class="line">  $.fn.compose = function<span class="list">(<span class="title">options</span>)</span> {</div><div class="line">      options = $.extend<span class="list">({</span></div><div class="line">          number: <span class="number">2</span>,</div><div class="line">          ul: null</div><div class="line">      }, options)<span class="comment">;</span></div><div class="line">      </div><div class="line">      function setNumber<span class="list">(<span class="title">number</span>)</span> {</div><div class="line">          options.number = number<span class="comment">;</span></div><div class="line">      }</div><div class="line">      </div><div class="line">      this.change<span class="list">(<span class="title">function</span><span class="list">()</span> {</span></div><div class="line">          if <span class="list">(<span class="title">options</span>.ul !== null)</span> {</div><div class="line">              var value = $<span class="list">(<span class="title">this</span>)</span>.val<span class="list">()</span><span class="comment">;</span></div><div class="line">              var ul = $<span class="list">(<span class="title">options</span>.ul)</span>.empty<span class="list">()</span><span class="comment">;</span></div><div class="line">              for<span class="list">(<span class="title">var</span> i=<span class="number">0</span><span class="comment">;i&lt;options.number;i++) {</span></span></div><div class="line">                  ul.append<span class="list">(<span class="quoted">'&lt;li&gt;</span>' + value + <span class="quoted">'&lt;/li&gt;</span>')</span></div><div class="line">              }            </div><div class="line">          }</div><div class="line">      })<span class="comment">;</span></div><div class="line">      </div><div class="line">      this.data<span class="list">(<span class="quoted">'compose</span>', {</span></div><div class="line">          setNumber: setNumber</div><div class="line">      })<span class="comment">;</span></div><div class="line">      </div><div class="line">      return this<span class="comment">;</span></div><div class="line">  }</div><div class="line">})<span class="list">(<span class="title">jQuery</span>)</span><span class="comment">;</span></div></pre></td></tr></table></figure>
+
+<p>Now, in order to change the number:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'#elem'</span>).compose({</div><div class="line">  <span class="built_in">number</span>: <span class="number">3</span>,</div><div class="line">  ul: <span class="string">'#ul'</span></div><div class="line">});</div><div class="line">$(<span class="string">'#elem'</span>).data(<span class="string">'compose'</span>).setNumber(<span class="number">8</span>);</div></pre></td></tr></table></figure>
+
+<p>And then the input’s value will appear 8 times. Live example for the compose plugin you can find <a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/compose-plugin/compose.html" target="_blank" rel="external">here</a>.</p>
+<h2 id="Summary">Summary</h2>
+<p>In this article I presented two jQuery plugin types and their structure (IIFE wrap and jQuery injection as $), I explained how to add compulsory and optional parameters, demonstrated the meaning of the this expression and described the jQuery chaining principal. At the end I also presented a way of letting the user interact the plugins.</p>
+<p><strong>Template of plugin that does not work on an element</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// jQuery plugin <span class="keyword">template</span> <span class="keyword">for</span> plugin that does <span class="keyword">not</span> work on element</div><div class="line">(function($) {</div><div class="line">  $.extend($, {</div><div class="line">      pluginName: function(param, options) {</div><div class="line">          options = $.extend({</div><div class="line">              // <span class="type">Options</span> <span class="type">Defaults</span></div><div class="line">          }, options);</div><div class="line"></div><div class="line">          // <span class="type">Plugin</span> content</div><div class="line">      </div><div class="line">          <span class="keyword">return</span> {</div><div class="line">              // <span class="type">Plugin</span> <span class="keyword">interface</span> <span class="keyword">object</span></div><div class="line">          };</div><div class="line">      }</div><div class="line">  });</div><div class="line">})(jQuery);</div></pre></td></tr></table></figure>
+
+<p><strong>Template of plugin that does work on an element</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// jQuery plugin template for plugin that does work on element</span></div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">($)</span> </span>{</div><div class="line">  $.extend($.fn, {</div><div class="line">      pluginName: <span class="function"><span class="keyword">function</span><span class="params">(param, options)</span> </span>{</div><div class="line">          options = $.extend({</div><div class="line">              <span class="comment">// Options Defaults</span></div><div class="line">          }, options);</div><div class="line"></div><div class="line">          <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">              <span class="comment">// Operations for each DOM element</span></div><div class="line">          }).data(<span class="string">'pluginName'</span>, {</div><div class="line">              <span class="comment">// Plugin interface object</span></div><div class="line">          });</div><div class="line">      </div><div class="line">          <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">      }</div><div class="line">  });</div><div class="line">})(jQuery);</div></pre></td></tr></table></figure>
+
+<h2 id="Demo_&amp;_Download">Demo &amp; Download</h2>
+<ul>
+<li>Live example for the float plugin you can find <a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/float-plugin/float.html" target="_blank" rel="external">here</a>.</li>
+<li>Live example for the compose plugin you can find <a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/compose-plugin/compose.html" target="_blank" rel="external">here</a>.</li>
+<li><a href="http://www.webdeveasy.com/code/jquery-plugin-pattern/jquery-plugin-pattern.zip" target="_blank" rel="external">Here</a> you can find all the examples of this post and the plugins templates.</li>
+</ul>
+<p>I hope you find this post useful, and if you have any question, don’t hesitate to ask!</p>
+<p>转自<a href="http://www.webdeveasy.com/jquery-plugin-pattern/" target="_blank" rel="external">http://www.webdeveasy.com/jquery-plugin-pattern/</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://leol.in/2014/11/19/jquery-plugin-pattern/" data-title="【转】jQuery Plugin Pattern | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/10/29/comprehensive-haslayout/"  title="【转】hasLayout综合">
+ <strong>NEXT:</strong><br/> 
+ <span>【转】hasLayout综合
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Two_jQuery_Plugin_Types"><span class="toc-number">1.</span> <span class="toc-text">Two jQuery Plugin Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Limit_The_Scope"><span class="toc-number">2.</span> <span class="toc-text">Limit The Scope</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_Dollar_Sign"><span class="toc-number">3.</span> <span class="toc-text">The Dollar Sign</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Plugin_Parameters_and_Defaults"><span class="toc-number">4.</span> <span class="toc-text">Plugin Parameters and Defaults</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_this_Expression"><span class="toc-number">5.</span> <span class="toc-text">The this Expression</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The_this_expression_for_plugins_that_do_not_work_on_an_element"><span class="toc-number">5.1.</span> <span class="toc-text">The this expression for plugins that do not work on an element</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The_this_expression_for_plugins_that_do_work_on_an_element"><span class="toc-number">5.2.</span> <span class="toc-text">The this expression for plugins that do work on an element</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jQuery_Chaining_Principal"><span class="toc-number">6.</span> <span class="toc-text">jQuery Chaining Principal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User_Interface"><span class="toc-number">7.</span> <span class="toc-text">User Interface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summary"><span class="toc-number">8.</span> <span class="toc-text">Summary</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo_&_Download"><span class="toc-number">9.</span> <span class="toc-text">Demo & Download</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/IE/" title="IE">IE<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web/" title="web">web<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://leol.in" target="_blank" title="Leolin">Leolin</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
