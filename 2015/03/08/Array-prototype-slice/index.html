@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>【笔记】正则表达式 | Leolin杂货小店</title>
+    <title>【笔记】浅谈Array.prototype.slice()其他用法 | Leolin杂货小店</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="Leolin">
     
-    <meta name="description" content="什么是正则表达式
-基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。
-不同的正则表达式引擎
-正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。不同引擎并不互相兼容，由于作者比较">
+    <meta name="description" content="众所周知，JS中Array对象有个slice方法（String也有一个），这个方法具体作用是返回从数组中指定下标范围的元素，具体使用请查看 W3C文档。今天在看Curring时候发现经常出现：
+1Array.prototype.slice.call(arguments, 0);
+
+于是整理一下Arr">
     
     
     
@@ -70,15 +70,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/09/05/the-study-of-Regex/" title="【笔记】正则表达式" itemprop="url">【笔记】正则表达式</a>
+      <a href="/2015/03/08/Array-prototype-slice/" title="【笔记】浅谈Array.prototype.slice()其他用法" itemprop="url">【笔记】浅谈Array.prototype.slice()其他用法</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://leol.in" title="Leolin">Leolin</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-09-05T07:51:21.000Z" itemprop="datePublished">Sep 5 2014</time>
-    Updated:<time datetime="2014-09-09T06:01:29.771Z" itemprop="dateModified">Sep 9 2014</time>
+    <time datetime="2015-03-08T03:21:10.000Z" itemprop="datePublished">Mar 8 2015</time>
+    Updated:<time datetime="2015-04-08T02:51:12.580Z" itemprop="dateModified">Apr 8 2015</time>
     
   </p>
 </header>
@@ -87,189 +87,27 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符集"><span class="toc-number">4.</span> <span class="toc-text">字符集</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#把类数组对象转化为数组"><span class="toc-number">1.</span> <span class="toc-text">把类数组对象转化为数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复制数组"><span class="toc-number">2.</span> <span class="toc-text">复制数组</span></a></li></ol>
 		</div>
 		
-		<h2 id="什么是正则表达式">什么是正则表达式</h2>
-<p>基本说来，正则表达式是一种用来描述一定数量文本的模式。Regex = Regular Express。一段文本就是最基本的模式。</p>
-<h2 id="不同的正则表达式引擎">不同的正则表达式引擎</h2>
-<p>正则引擎可以分为两大类：一种是DFA（确定性有穷自动机），另一种是NFA（非确定性有穷自动机）。<br>不同引擎并不互相兼容，由于作者比较常用PHP开发，PHP的三套正则引擎分别是<code>preg</code>、<code>ereg</code>、<code>mb_ereg</code>，其中<code>preg</code>提供的函数在速度方面都强于其余两者。</p>
-<table>
-<thead>
-<tr>
-<th>引擎类型</th>
-<th>程序</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DFA</td>
-<td>awk (大多数版本)、egrep(大多数版本)、flex、lex、MySQL、Procmail</td>
-</tr>
-<tr>
-<td>传统型NFA</td>
-<td>GNU Emacs、Java、grep(大多数版本)、less、more、.NET语言、PCRE library、Perl、PHP(所有三套正则库)、Python、Ruby、sed(大多数版本)、vi</td>
-</tr>
-<tr>
-<td>POSIX NFA</td>
-<td>mawk、Mortice Kern Systems’ utilities、GNU Emacs (明确指定时使用)</td>
-</tr>
-<tr>
-<td>DFA/NFA 混合</td>
-<td>GNU awk、GNU grep/egrep、Tcl</td>
-</tr>
-</tbody>
-</table>
-<h2 id="文字符号">文字符号</h2>
-<p>最基本的正则表达式由单个文字符号组成，如<code>a</code>，它将匹配字符串中第一次出现的字符<code>a</code>，如    <code>Jack is a boy</code>，<code>J</code>后的<code>a</code>将被匹配，而第二个<code>a</code>将不会被匹配。<br>要注意正则引擎缺省是<strong>大小写敏感</strong>的。</p>
-<ul>
-<li>特殊字符<br>对于文字字符，有12个字符被保留作特殊用途，称作<code>元字符</code>，分别是：<code>[ ] \ ^ $ . | ? * + ( )</code>。</li>
-<li>不可显示字符</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字符</th>
-<th>表示</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>\t</code></td>
-<td>代表Tab</td>
-</tr>
-<tr>
-<td><code>\r</code></td>
-<td>代表回车符</td>
-</tr>
-<tr>
-<td><code>\n</code></td>
-<td>代表换行符</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>注意：Windows文本使用<code>\r\n</code>来结束一行，Unix使用<code>\n</code>.</p>
-</blockquote>
-<h2 id="字符集">字符集</h2>
-<p>字符集是由一对方括号“[]”括起来的字符集合。</p>
-<ul>
-<li>字符集的一些应用</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>例子</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>sep[ae]r[ae]te</code></td>
-<td>查找一个可能有拼写错误的单词</td>
-</tr>
-<tr>
-<td><code>A-Za-z_][A-Za-z_0-9]*</code></td>
-<td>查找程序语言的标识符</td>
-</tr>
-<tr>
-<td><code>0[xX][A-Fa-f0-9]+</code></td>
-<td>查找C风格的十六进制数</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>字符集中的元字符</li>
-</ul>
-<p>在字符集中只有4个字符具有特殊含义，它们是：<code>]</code> <code>\</code> <code>^</code> <code>-</code>。</p>
-<table>
-<thead>
-<tr>
-<th>字符</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>]</td>
-<td>代表字符集定义的结束</td>
-</tr>
-<tr>
-<td>\</td>
-<td>代表转义</td>
-</tr>
-<tr>
-<td>^</td>
-<td>代表取反</td>
-</tr>
-<tr>
-<td>-</td>
-<td>代表范围定义</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>取反字符集</li>
-</ul>
-<p>在左方括号<code>[</code>后面紧跟一个尖括号<code>^</code>，将会对字符集取反。</p>
-<blockquote>
-<p>例：<code>q[^u]</code>，匹配一个q，后面跟着一个不是u的字符。</p>
-</blockquote>
-<ul>
-<li>字符集的简写</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字符集简写</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\d</td>
-<td>[0-9]</td>
-</tr>
-<tr>
-<td>\w</td>
-<td>单词字符</td>
-</tr>
-<tr>
-<td>\s</td>
-<td>“白字符”（空格符，Tab符以及回车换行符\r\n）</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>取反字符集简写</th>
-<th>意思</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\D</td>
-<td>[^0-9]</td>
-</tr>
-<tr>
-<td>\W</td>
-<td>[^\w]</td>
-</tr>
-<tr>
-<td>\S</td>
-<td>[^\d]</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>字符集的重复</li>
-</ul>
-<p>如果你用<code>?</code> <code>*</code> <code>+</code>操作符来重复一个字符集，你将会重复整个字符集，而不仅是它匹配的那个字符。</p>
-<blockquote>
-<p>例：<code>[0-9]+</code>会匹配837以及222。</p>
-</blockquote>
-<p><strong><em>未完待续……</em></strong></p>
+		<p>众所周知，JS中Array对象有个slice方法（String也有一个），这个方法具体作用是返回从数组中指定下标范围的元素，具体使用请查看 W3C文档。<br>今天在看Curring时候发现经常出现：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+
+<p>于是整理一下Array.prototype.slice()的奇技淫巧。</p>
+<hr>
+<h2 id="把类数组对象转化为数组">把类数组对象转化为数组</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">return</span> <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</div><div class="line">};</div><div class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// [1, 2, 3]</span></div></pre></td></tr></table></figure>
+
+<p>除此之外，Array.prototype.slice.call(arguments) == [].slice.call(arguments)。<br>另外，还可以使用 bind 进行更酷炫的变形：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> slice = <span class="function"><span class="keyword">Function</span>.<span class="title">prototype</span>.<span class="title">call</span>.<span class="title">bind</span><span class="params">(<span class="keyword">Array</span>.prototype.slice)</span>;</span></div><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span><span class="params">()</span> <span class="comment">{</span></span></div><div class="line">return slice(arguments);</div><div class="line">}</div><div class="line"><span class="title">foo</span><span class="params">(1, 2, 3)</span>; <span class="comment">// [1, 2, 3]</span></div><div class="line">slice([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]); <span class="comment">// [1, 2, 3]</span></div><div class="line"><span class="comment">// 但是</span></div><div class="line">slice(<span class="string">'abc'</span>); <span class="comment">// ['a', 'b', 'c'] </span></div><div class="line">foo(<span class="string">'abc'</span>); <span class="comment">// ['abc'] 为什么这样呢？事实上相当于foo({0: 'abc', length:1}),其实arguments内部远远没有这么简单</span></div></pre></td></tr></table></figure>
+
+<p>一般这样对于习惯函数式编程的码农是比较容易上手。<br>说起这个稍微拓展一下，在某个blog看到下面一句很优雅的代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bind = <span class="built_in">Function</span>.prototype.call.bind(<span class="built_in">Function</span>.prototype.bind); </div><div class="line"><span class="keyword">var</span> context = { foo: <span class="string">"bar"</span> };</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnFoo</span> <span class="params">()</span> </span>{</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.foo;</div><div class="line">}</div><div class="line"><span class="keyword">var</span> amazing = bind(returnFoo, context);</div><div class="line">amazing(); <span class="comment">// =&gt; bar</span></div></pre></td></tr></table></figure>
+
+<p>这句表示 foo.bind(arguments) =&gt; bind(foo, arguments)，对于熟悉函数式编程的人一眼就看出来，补一句，这里的bind在ES6还处于草案阶段。</p>
+<h2 id="复制数组">复制数组</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.clone = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.slice(<span class="number">0</span>);</div><div class="line">};</div><div class="line"><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> b = a.clone();</div><div class="line"><span class="built_in">console</span>.log(a == b); <span class="comment">// false 因为clone函数创建一块新内存存放新数组，变量a与b指向不同数组对象</span></div></pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -284,7 +122,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://leol.in/2014/09/05/the-study-of-Regex/" data-title="【笔记】正则表达式 | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  <div data-url="http://leol.in/2015/03/08/Array-prototype-slice/" data-title="【笔记】浅谈Array.prototype.slice()其他用法 | Leolin杂货小店" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -293,19 +131,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/09/18/ActiveRecord-ORM-vs-Mysqli-vs-PDO-vs-Mongodb/" title="ActiveRecord ORM vs. Mysqli vs. PDO vs. Mongodb">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  ActiveRecord ORM vs. Mysqli vs. PDO vs. Mongodb</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/09/04/modern-web-development-tools/"  title="【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)">
+<a href="/2014/11/19/jquery-plugin-pattern/"  title="【转】jQuery Plugin Pattern">
  <strong>NEXT:</strong><br/> 
- <span>【转】Web开发利器:介绍一款快速开发套件 (Node, Grunt, Bower和Yeoman)
+ <span>【转】jQuery Plugin Pattern
 </span>
 </a>
 </div>
@@ -322,7 +152,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是正则表达式"><span class="toc-number">1.</span> <span class="toc-text">什么是正则表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#不同的正则表达式引擎"><span class="toc-number">2.</span> <span class="toc-text">不同的正则表达式引擎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文字符号"><span class="toc-number">3.</span> <span class="toc-text">文字符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字符集"><span class="toc-number">4.</span> <span class="toc-text">字符集</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#把类数组对象转化为数组"><span class="toc-number">1.</span> <span class="toc-text">把类数组对象转化为数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复制数组"><span class="toc-number">2.</span> <span class="toc-text">复制数组</span></a></li></ol>
   </div>
 
 <div id="asidepart">
