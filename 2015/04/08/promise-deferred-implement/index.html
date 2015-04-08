@@ -1,0 +1,320 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>【笔记】Promise/Deferred模式简单实现 | Leolin杂货小店</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Leolin">
+    
+    <meta name="description" content="Deferred主要用于内部维护异步模型的状态；Promise则用于外部，通过then()方法暴露给外部以添加自定义逻辑。Promise和Deferred的整体关系如图：
+1234567891011121314151617181920212223242526272829303132333435363">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Leolin杂货小店" title="Leolin杂货小店"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Leolin杂货小店">Leolin杂货小店</a></h1>
+				<h2 class="blog-motto">杂七杂八</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:leol.in">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/08/promise-deferred-implement/" title="【笔记】Promise/Deferred模式简单实现" itemprop="url">【笔记】Promise/Deferred模式简单实现</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://leol.in" title="Leolin">Leolin</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-08T07:28:06.000Z" itemprop="datePublished">Apr 8 2015</time>
+    Updated:<time datetime="2015-04-08T07:31:29.094Z" itemprop="dateModified">Apr 8 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<p>Deferred主要用于内部维护异步模型的状态；Promise则用于外部，通过then()方法暴露给外部以添加自定义逻辑。<br>Promise和Deferred的整体关系如图：<br><img src="http://i1.tietuku.com/d3feae995d74778b.png" alt="Promise和Deferred的整体关系图"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Deferred = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">	<span class="comment">// 创建Promise实例</span></div><div class="line">	<span class="keyword">this</span>.promise = <span class="keyword">new</span> Promise();</div><div class="line">};</div><div class="line"><span class="comment">// 完成态</span></div><div class="line">Deferred.prototype.resolve = <span class="function"><span class="keyword">function</span><span class="params">(obj)</span> </span>{</div><div class="line">	<span class="comment">// 赋值当前对象实例的promise</span></div><div class="line">	<span class="keyword">var</span> promise = <span class="keyword">this</span>.promise;</div><div class="line">	<span class="comment">// 回调函数handler{fulfilled, error}</span></div><div class="line">	<span class="keyword">var</span> handler;</div><div class="line">	<span class="keyword">while</span> ((handler = promise.queue.shift())) {</div><div class="line">		<span class="comment">// 如果存在完成态回调函数</span></div><div class="line">		<span class="keyword">if</span> (handler && handler.fulfilled) {</div><div class="line">			<span class="comment">// 把参数obj传进完成态回调函数handler.fulfilled并执行</span></div><div class="line">			<span class="keyword">var</span> ret = handler.fulfilled(obj);</div><div class="line">			<span class="comment">// 如果return promise执行if条件</span></div><div class="line">			<span class="keyword">if</span> (ret && ret.isPromise) {</div><div class="line">				ret.queue = promise.queue;</div><div class="line">				<span class="keyword">this</span>.promise = ret;</div><div class="line">				<span class="keyword">return</span> ;</div><div class="line">			}</div><div class="line">		}</div><div class="line">	}</div><div class="line">};</div><div class="line"><span class="comment">// 失败态</span></div><div class="line">Deferred.prototype.reject = <span class="function"><span class="keyword">function</span><span class="params">(err)</span> </span>{</div><div class="line">	<span class="keyword">var</span> promise = <span class="keyword">this</span>.promise;</div><div class="line">	<span class="keyword">var</span> handler;</div><div class="line">	<span class="keyword">while</span> ((handler = promise.queue.shift())) {</div><div class="line">		<span class="keyword">if</span> (handler && handler.error) {</div><div class="line">			<span class="comment">// 把参数err传进失败态回调函数handler.fulfilled并执行</span></div><div class="line">			<span class="keyword">var</span> ret = handler.error(err);</div><div class="line">			<span class="keyword">if</span> (ret && ret.isPromise) {</div><div class="line">				ret.queue = promise.queue;</div><div class="line">				<span class="keyword">this</span>.promise = ret;</div><div class="line">				<span class="keyword">return</span> ;</div><div class="line">			}</div><div class="line">		}</div><div class="line">	}</div><div class="line">};</div><div class="line"><span class="comment">// 生成回调函数</span></div><div class="line">Deferred.prototype.callback = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">	<span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(err, file)</span> </span>{</div><div class="line">		<span class="keyword">if</span> (err) {</div><div class="line">			<span class="keyword">return</span> that.reject(err);</div><div class="line">		}</div><div class="line">		that.resolve(file);</div><div class="line">	};</div><div class="line">};</div><div class="line"><span class="keyword">var</span> Promise = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">	<span class="comment">// 队列用于存储待执行的回调函数</span></div><div class="line">	<span class="keyword">this</span>.queue = [];</div><div class="line">	<span class="keyword">this</span>.isPromise = <span class="literal">true</span>;</div><div class="line">};</div><div class="line">Promise.prototype.then = <span class="function"><span class="keyword">function</span><span class="params">(fulfilledHandler, errorHandler, progressHandler)</span> </span>{</div><div class="line">	<span class="keyword">var</span> handler = {};</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> fulfilledHandler === <span class="string">'function'</span>) {</div><div class="line">		handler.fulfilled = fulfilledHandler;</div><div class="line">	}</div><div class="line">	<span class="keyword">if</span> (<span class="keyword">typeof</span> errorHandler === <span class="string">'function'</span>) {</div><div class="line">		handler.error = errorHandler;</div><div class="line">	}</div><div class="line">	<span class="keyword">this</span>.queue.push(handler);</div><div class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>转自：《深入浅出nodejs》</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/web/">web</a><a href="/tags/promise/">promise</a><a href="/tags/deferred/">deferred</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://leol.in/2015/04/08/promise-deferred-implement/" data-title="【笔记】Promise/Deferred模式简单实现 | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/03/16/talk-about-closure/"  title="【笔记】从两段代码说闭包">
+ <strong>NEXT:</strong><br/> 
+ <span>【笔记】从两段代码说闭包
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/IE/" title="IE">IE<sup>1</sup></a></li>
+		
+			<li><a href="/tags/deferred/" title="deferred">deferred<sup>1</sup></a></li>
+		
+			<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web/" title="web">web<sup>9</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://leol.in" target="_blank" title="Leolin">Leolin</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
