@@ -1,0 +1,353 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>jQuery的事件处理顺序 | Leolin杂货小店</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="Leolin">
+    
+    <meta name="description" content="原文在这里
+前端工程师经常会碰到一些事件触发顺序的bug。例如，点击一个“OK”按钮应该是关闭弹出层，然后触发一个action并且报告action的状态，但是可能会有多个点击处理器会被调用。那么问题来了，究竟浏览器（或者jQuery）怎么去管理绑定在同一元素的多个事件顺序呢？再者，如果使用了事件代理">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Leolin杂货小店" title="Leolin杂货小店"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Leolin杂货小店">Leolin杂货小店</a></h1>
+				<h2 class="blog-motto">杂七杂八</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:leol.in">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/29/Order-of-Event-Handling-in-jQuery/" title="jQuery的事件处理顺序" itemprop="url">jQuery的事件处理顺序</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://leol.in" title="Leolin">Leolin</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-07-29T06:09:23.000Z" itemprop="datePublished">Jul 29 2015</time>
+    Updated:<time datetime="2015-07-29T07:39:05.318Z" itemprop="dateModified">Jul 29 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<p>原文在<a href="https://www.box.com/blog/order-of-event-handling-in-jquery/" target="_blank" rel="external">这里</a></p>
+<p>前端工程师经常会碰到一些事件触发顺序的bug。例如，点击一个“OK”按钮应该是关闭弹出层，然后触发一个action并且报告action的状态，但是可能会有多个点击处理器会被调用。那么问题来了，究竟浏览器（或者jQuery）怎么去管理绑定在同一元素的多个事件顺序呢？再者，如果使用了事件代理怎么办呢？</p>
+<p>我创建了一个<a href="http://jsfiddle.net/davidtong/DZMVf/" target="_blank" rel="external">demo</a>去弄清楚这个问题。在这个demo中，包装容器wrapper中有一个button，同时这个容器也在main page container中。这里有多个事件绑定在每个元素上面。其中有些事件监听器使用了代理，这个代理绑定在父元素中负责监听来自子元素事件的冒泡。<br>这个是HTML结构：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"main"</span>&gt;</div><div class="line">    &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"wrapper"</span>&gt;</div><div class="line">        &lt;button <span class="property">id</span>=<span class="string">"button"</span>&gt;Click <span class="keyword">me</span>&lt;/button&gt;</div><div class="line">    &lt;/<span class="keyword">div</span>&gt;</div><div class="line">&lt;/<span class="keyword">div</span>&gt;</div><div class="line"></div><div class="line">&lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"sandbox"</span>&gt;&lt;/<span class="keyword">div</span>&gt;</div><div class="line"></div><div class="line">&lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"consoleContainer"</span>&gt;</div><div class="line">     &lt;h2&gt;Console&lt;/h2&gt;</div><div class="line">     &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"console"</span>&gt;&lt;/<span class="keyword">div</span>&gt;</div><div class="line">&lt;/<span class="keyword">div</span>&gt;</div></pre></td></tr></table></figure>
+
+<p>然后我绑定了一堆事件在这些元素上面：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Direct events</span></div><div class="line"><span class="variable">$wrapper</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'olive'</span>, cloneDrone);</div><div class="line"><span class="variable">$button</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'coral'</span>, cloneDrone);</div><div class="line"><span class="variable">$button</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'lawngreen'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'salmon'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'plum'</span>, cloneDrone);</div><div class="line"><span class="variable">$button</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'peru'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="keyword">null</span>, <span class="string">'tomato'</span>, cloneDrone);</div><div class="line"><span class="comment">// Delegate events</span></div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="string">'button'</span>, <span class="string">'skyblue'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="string">'button'</span>, <span class="string">'snow'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="string">'#wrapper'</span>, <span class="string">'papayawhip'</span>, cloneDrone);</div><div class="line"><span class="variable">$main</span>.on(<span class="string">'click'</span>, <span class="string">'button'</span>, <span class="string">'springgreen'</span>, cloneDrone);</div><div class="line"><span class="variable">$wrapper</span>.on(<span class="string">'click'</span>, <span class="string">'button'</span>, <span class="string">'orchid'</span>, cloneDrone);</div></pre></td></tr></table></figure>
+
+<p>当用户点击了button，事件的触发按照以下顺序进行：</p>
+<ul>
+<li>直接绑定在button的事件</li>
+<li>委托在wrapper的button事件</li>
+<li>冒泡后直接绑定在wrapper的事件</li>
+<li>委托在main container的button事件</li>
+<li>委托在main container的wrapper事件</li>
+<li>冒泡后直接绑定在main container的事件</li>
+<li>等等。</li>
+</ul>
+<p><img src="http://ww3.sinaimg.cn/large/59b0076fgw1eujmveit8wj206i0cf0tx.jpg" alt=""></p>
+<p>在内部实现中，jQuery为每个元素维护一个数据对象用来存储绑定在元素上面的事件。这个数据对象是个队列（先进先出）。当一个事件触发，先绑定的先触发。</p>
+<p>在jQuery中，事件委托是有特权的可以插队的事件处理方式。事实上，它们总是被存到队列的前方。这个机制允许委托事件先于直接事件被触发。在前面的例子当中，当1)已经完成，事件就会冒泡到wrapper，委托事件2)在直接事件之前触发。</p>
+<p>整个事件管理机制在各种现代浏览器都是一致的（包括IE6 - 8）。</p>
+<p>另一方面值得一提的是，事件冒泡行为在所有浏览器都实现，所以你依然能够使用addEventListener(type, listener, useCapture)方法强制现代浏览器（还有IE9+）切换到冒泡方式，但是为了跨浏览器的兼容，你应该只使用事件冒泡。</p>
+<p>然而，事件捕获方式并没有抛弃，例如focus，blur还有change等事件并没有冒泡因为事实上不是所有元素支持冒泡。对于IE8以下（包括IE8），focus和blur可以用focusin和focusout代替，这两个是可以冒泡。对于非IE浏览器，我们可以在父元素上使用捕获方式监测focus和blur。而且，这个性能测试（译者注：链接呢？！）表明事件捕获比事件冒泡更快。</p>
+<p>=============</p>
+<p>译者注：<br>下图是上面的<a href="http://jsfiddle.net/davidtong/DZMVf/" target="_blank" rel="external">demo</a>中事件队列顺序图：<br>（b=#button, w=#wrapper, wb=#wrapper-&gt;#button, mb=#main-&gt;#button, mw=#main-&gt;#wrapper, m=main）<br><img src="http://ww2.sinaimg.cn/large/59b0076fgw1eujmvqs1f8j20iq05it95.jpg" alt=""></p>
+<p>从图中可以看出，事件顺序是：</p>
+<ol>
+<li>从目标元素(下称target)开始，先执行target的委托事件（优先级高低按照距离target由近到远的顺序）</li>
+<li>同一优先级的按照注册时的顺序执行</li>
+<li>执行target的直接事件(非委托事件)</li>
+<li>冒泡到父级，target变为当前父级，重复(1)</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/jquery/">jquery</a><a href="/tags/js/">js</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://leol.in/2015/07/29/Order-of-Event-Handling-in-jQuery/" data-title="jQuery的事件处理顺序 | Leolin杂货小店" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/04/08/promise-deferred-implement/"  title="【笔记】Promise/Deferred模式简单实现">
+ <strong>NEXT:</strong><br/> 
+ <span>【笔记】Promise/Deferred模式简单实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/IE/" title="IE">IE<sup>1</sup></a></li>
+		
+			<li><a href="/tags/deferred/" title="deferred">deferred<sup>1</sup></a></li>
+		
+			<li><a href="/tags/jquery/" title="jquery">jquery<sup>1</sup></a></li>
+		
+			<li><a href="/tags/js/" title="js">js<sup>1</sup></a></li>
+		
+			<li><a href="/tags/promise/" title="promise">promise<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web/" title="web">web<sup>9</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://leol.in" target="_blank" title="Leolin">Leolin</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
